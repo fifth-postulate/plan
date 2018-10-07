@@ -1,2 +1,4 @@
 # plan
-Solving the planning problem the school of understanding has.
+Solving the planning problem [the School of Understanding][school] has.
+
+[school]: https://www.schoolofunderstanding.nl/

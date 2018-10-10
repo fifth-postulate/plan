@@ -35,5 +35,5 @@ type alias Teacher =
 
 {-| A means to identify a teacher.
 -}
-type alias TeacherIdentity =
-    { nickname : String }
+type TeacherIdentity
+    = TeacherIdentity { nickname : String }

@@ -14,3 +14,11 @@ type Weekday
     | Friday
     | Saterday
     | Sunday
+
+
+{-| Subjects taught in the School of Understanding.
+-}
+type Subject
+    = Grammar
+    | Spelling
+    | Math

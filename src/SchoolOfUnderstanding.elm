@@ -37,3 +37,25 @@ type alias Teacher =
 -}
 type TeacherIdentity
     = TeacherIdentity { nickname : String }
+
+
+{-| A `group` is the collective `Level` of a collection of `Student`s in a certain `Subject`.
+-}
+type alias Group =
+    { identity : GroupIdentity
+    , subject : Subject
+    , level : Level
+    , lessonsNeeded : Int
+    }
+
+
+{-| A means to identify a group.
+-}
+type GroupIdentity
+    = GroupIdentity Int
+
+
+{-| A way to express the experience of a group.
+-}
+type Level
+    = Level Int

@@ -22,3 +22,12 @@ type Subject
     = Grammar
     | Spelling
     | Math
+
+
+{-| Teacher, capable of teaching subjects on certain weekdays.
+-}
+type alias Teacher =
+    { nickname : String
+    , capabilities : List Subject
+    , availabilities : List Weekday
+    }

@@ -27,7 +27,13 @@ type Subject
 {-| Teacher, capable of teaching subjects on certain weekdays.
 -}
 type alias Teacher =
-    { nickname : String
+    { identity : TeacherIdentity
     , capabilities : List Subject
     , availabilities : List Weekday
     }
+
+
+{-| A means to identify a teacher.
+-}
+type alias TeacherIdentity =
+    { nickname : String }

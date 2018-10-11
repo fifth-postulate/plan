@@ -1,5 +1,5 @@
 module Stream exposing
-    ( empty, fromList
+    ( empty, fromList, insert
     , toList
     , Stream
     )
@@ -7,9 +7,9 @@ module Stream exposing
 {-| `Stream` provides an abstraction that allows to advance elements revisit them later.
 
 
-# Constructor
+# Build
 
-@docs empty, fromList
+@docs empty, fromList, insert
 
 
 # Conversion
@@ -57,6 +57,21 @@ fromList elements =
                 |> List.tail
                 |> Maybe.withDefault []
         }
+
+
+{-| Insert an element into a stream.
+
+The element will be placed at the end of the elements to come, unless there is no current element.
+
+-}
+insert : a -> Stream a -> Stream a
+insert element (Stream ({ previous, current, next } as stream)) =
+    case current of
+        Nothing ->
+            Stream { stream | current = Just element }
+
+        Just _ ->
+            Stream { stream | next = next ++ [ element ] }
 
 
 {-| Return a list of elements in the `Stream`.

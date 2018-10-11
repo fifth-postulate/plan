@@ -34,6 +34,21 @@ suite =
                     in
                     Expect.equal elements original
             ]
+        , describe "building Streams"
+            [ test "inserting elements creates a correct stream" <|
+                \_ ->
+                    let
+                        stream =
+                            Stream.empty
+                                |> Stream.insert 1
+                                |> Stream.insert 2
+                                |> Stream.insert 3
+
+                        elements
+                            = Stream.toList stream
+                    in
+                    Expect.equal elements [ 1, 2, 3 ]
+            ]
         , describe "conversions"
             [ fuzz (list int) "fromList and toList are inverse operations" <|
                 \original ->

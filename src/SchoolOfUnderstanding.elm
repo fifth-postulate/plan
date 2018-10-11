@@ -75,7 +75,7 @@ type Level
 -}
 type alias Student =
     { identity : StudentIdentity
-    , participation : Dict Subject GroupIdentity
+    , memberships : Dict Subject GroupIdentity
     }
 
 

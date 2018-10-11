@@ -22,6 +22,26 @@ type Weekday
     | Sunday
 
 
+{-| Available `Slot`s per `Weekday`
+-}
+type alias Slots =
+    Dict Weekday (List Slot)
+
+
+{-| A `Slot` is a period in which a `Teacher` teaches a `Subject` to a `Group`.
+-}
+type alias Slot =
+    { start : TimeOfDay, finish : TimeOfDay }
+
+
+{-| A particular moment of time.
+-}
+type alias TimeOfDay =
+    { hour : Int
+    , minutes : Int
+    }
+
+
 {-| Subjects taught in the School of Understanding.
 -}
 type Subject

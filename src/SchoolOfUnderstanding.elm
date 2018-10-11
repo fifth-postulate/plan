@@ -25,9 +25,13 @@ type Weekday
 {-| Subjects taught in the School of Understanding.
 -}
 type Subject
-    = Grammar
-    | Spelling
-    | Math
+    = Subject { identity : SubjectIdentity }
+
+
+{-| A means to identify a subject.
+-}
+type SubjectIdentity
+    = SubjectIdentity { name : String }
 
 
 {-| Teacher, capable of teaching subjects on certain weekdays.

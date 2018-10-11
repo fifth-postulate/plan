@@ -1,5 +1,6 @@
 module Stack exposing
-    ( empty
+    ( empty, fromList
+    , push
     , isEmpty
     , toList
     , Stack
@@ -10,7 +11,12 @@ module Stack exposing
 
 # Constructor
 
-@docs empty
+@docs empty, fromList
+
+
+# Operation
+
+@docs push
 
 
 # Queries
@@ -36,6 +42,25 @@ type Stack a
 empty : Stack a
 empty =
     Stack []
+
+
+{-| Create an `Stack` from a list.
+
+The elements of the list will be inserted from left to right. This means that the head will and up on hte bottom of the stack.
+
+-}
+fromList : List a -> Stack a
+fromList elements =
+    elements
+        |> List.reverse
+        |> Stack
+
+
+{-| Pushes an element onto the `Stack`.
+-}
+push : a -> Stack a -> Stack a
+push head (Stack tail) =
+    Stack (head :: tail)
 
 
 {-| Determines if a `Stack` contains elements.

@@ -1,5 +1,6 @@
 module Stream exposing
-    ( empty, fromList, insert
+    ( empty, fromList, insert, withHistory
+    , advance
     , isEmpty
     , toList
     , Stream
@@ -10,7 +11,12 @@ module Stream exposing
 
 # Build
 
-@docs empty, fromList, insert
+@docs empty, fromList, insert, withHistory
+
+
+# Operation
+
+@docs advance
 
 
 # Queries
@@ -65,6 +71,17 @@ fromList elements =
         }
 
 
+{-| Create a `Stream` with a populated history.
+-}
+withHistory : List a -> Stream a -> Stream a
+withHistory history (Stream ({ previous, current, next } as stream)) =
+    let
+        stack =
+            Stack.fromList history
+    in
+    Stream { stream | previous = stack }
+
+
 {-| Insert an element into a stream.
 
 The element will be placed at the end of the elements to come, unless there is no current element.
@@ -78,6 +95,34 @@ insert element (Stream ({ previous, current, next } as stream)) =
 
         Just _ ->
             Stream { stream | next = next ++ [ element ] }
+
+
+{-| Advance the `Stream`, moving elements from next via current to previous.
+-}
+advance : Stream a -> Stream a
+advance (Stream { previous, current, next } as stream) =
+    case current of
+        Nothing ->
+            stream
+
+        Just value ->
+            let
+                p =
+                    Stack.push value previous
+
+                c =
+                    List.head next
+
+                n =
+                    next
+                        |> List.tail
+                        |> Maybe.withDefault []
+            in
+            Stream
+                { previous = p
+                , current = c
+                , next = n
+                }
 
 
 {-| Determines if a `Stream` contains elements

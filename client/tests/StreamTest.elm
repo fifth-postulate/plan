@@ -72,6 +72,22 @@ suite =
                     in
                     Expect.false "expected an non empty stream to be non empty" isEmpty
             ]
+        , describe "operation" [
+               test "advance a stream correctly" <|
+                   \_ ->
+                   let
+                       actual =
+                           [1,2,3,4,5]
+                           |> Stream.fromList
+                           |> Stream.advance
+                           |> Stream.advance
+
+                       expected =
+                           Stream.fromList [3, 4, 5]
+                           |> Stream.withHistory [1, 2]
+                  in
+                      Expect.equal actual expected
+              ]
         , describe "conversions"
             [ fuzz (list int) "fromList and toList are inverse operations" <|
                 \original ->

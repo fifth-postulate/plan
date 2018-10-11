@@ -1,5 +1,6 @@
 module Stack exposing
     ( empty
+    , isEmpty
     , toList
     , Stack
     )
@@ -10,6 +11,11 @@ module Stack exposing
 # Constructor
 
 @docs empty
+
+
+# Queries
+
+@docs isEmpty
 
 
 # Conversion
@@ -30,6 +36,13 @@ type Stack a
 empty : Stack a
 empty =
     Stack []
+
+
+{-| Determines if a `Stack` contains elements.
+-}
+isEmpty : Stack a -> Bool
+isEmpty (Stack elements) =
+    List.isEmpty elements
 
 
 {-| Returns a list of elements in the `Stack`, from top to bottom.

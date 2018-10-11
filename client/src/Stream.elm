@@ -1,5 +1,6 @@
 module Stream exposing
     ( empty, fromList, insert
+    , isEmpty
     , toList
     , Stream
     )
@@ -10,6 +11,11 @@ module Stream exposing
 # Build
 
 @docs empty, fromList, insert
+
+
+# Queries
+
+@docs isEmpty
 
 
 # Conversion
@@ -72,6 +78,21 @@ insert element (Stream ({ previous, current, next } as stream)) =
 
         Just _ ->
             Stream { stream | next = next ++ [ element ] }
+
+
+{-| Determines if a `Stream` contains elements
+-}
+isEmpty : Stream a -> Bool
+isEmpty (Stream { previous, current, next }) =
+    let
+        hasCurrent =
+            current
+                |> Maybe.map (\_ -> True)
+                |> Maybe.withDefault False
+    in
+    Stack.isEmpty previous
+        && not hasCurrent
+        && List.isEmpty next
 
 
 {-| Return a list of elements in the `Stream`.

@@ -1,5 +1,5 @@
 module Stream exposing
-    ( empty
+    ( empty, fromList
     , toList
     , Stream
     )
@@ -9,7 +9,8 @@ module Stream exposing
 
 # Constructor
 
-@docs empty
+@docs empty, fromList
+
 
 # Conversion
 
@@ -34,10 +35,28 @@ type Stream a
 -}
 empty : Stream a
 empty =
-    Stream { previous = Stack.empty
-    , current = Nothing
-    , next = []
-    }
+    Stream
+        { previous = Stack.empty
+        , current = Nothing
+        , next = []
+        }
+
+
+{-| Creates a `Stream` with elements from a list.
+
+The head of the list will be the current element. The tail of the list will follow the current element in order.
+
+-}
+fromList : List a -> Stream a
+fromList elements =
+    Stream
+        { previous = Stack.empty
+        , current = List.head elements
+        , next =
+            elements
+                |> List.tail
+                |> Maybe.withDefault []
+        }
 
 
 {-| Return a list of elements in the `Stream`.

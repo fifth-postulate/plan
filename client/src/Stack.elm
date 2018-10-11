@@ -24,13 +24,16 @@ module Stack exposing
 type Stack a
     = Stack (List a)
 
-{-| Creates an empty `Stack`. -}
+
+{-| Creates an empty `Stack`.
+-}
 empty : Stack a
 empty =
     Stack []
 
 
-{-| Returns a list of elements in the `Stack`, from top to bottom. -}
+{-| Returns a list of elements in the `Stack`, from top to bottom.
+-}
 toList : Stack a -> List a
 toList (Stack elements) =
     elements

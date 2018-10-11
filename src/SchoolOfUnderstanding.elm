@@ -1,4 +1,4 @@
-module SchoolOfUnderstanding exposing (Weekday(..))
+module SchoolOfUnderstanding exposing (Dict, Group, GroupIdentity, Level(..), Slot, Slots, Student, StudentIdentity, Subject(..), SubjectIdentity, Teacher, TeacherIdentity, TimeOfDay, Weekday(..))
 
 {-| The module defines various types that module the planning problem of the [School of Understanding](https://www.schoolofunderstanding.nl/).
 -}

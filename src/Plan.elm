@@ -7,10 +7,10 @@ module Plan exposing (Strategy)
 {-| A `Strategy` describes a way to solve a planning problem.
 -}
 type alias Strategy =
-    Input -> Stream Candidate
+    ProblemDefinition -> Stream Candidate
 
 
-type alias Input =
+type alias ProblemDefinition =
     {}
 
 

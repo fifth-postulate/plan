@@ -2,6 +2,7 @@ module Stream exposing
     ( empty, fromList, insert, withHistory
     , advance, retrograde
     , isEmpty, peek
+    , update
     , toList
     , Stream
     )
@@ -24,6 +25,11 @@ The following invariant will always be held for a `Stream`. Either the `Stream` 
 # Queries
 
 @docs isEmpty, peek
+
+
+# Update
+
+@docs update
 
 
 # Conversion
@@ -187,6 +193,16 @@ isEmpty (Stream { previous, current, next }) =
 peek : Stream a -> Maybe a
 peek (Stream { current }) =
     current
+
+
+{-| Change the current value of the `Stream`.
+
+The update function receives the current value and must return actual value.
+
+-}
+update : (Maybe a -> a) -> Stream a -> Stream a
+update f (Stream ({ next, current, previous } as s)) =
+    Stream { s | current = Just <| f current }
 
 
 {-| Return a list of elements in the `Stream`.

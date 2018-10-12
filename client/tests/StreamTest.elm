@@ -91,7 +91,7 @@ suite =
                 \_ ->
                     let
                         actual =
-                            [3, 4, 5]
+                            [ 3, 4, 5 ]
                                 |> Stream.fromList
                                 |> Stream.withHistory [ 1, 2 ]
                                 |> Stream.retrograde
@@ -102,7 +102,20 @@ suite =
                             [ 1, 2, 3, 4, 5 ]
                                 |> Stream.fromList
                                 |> Stream.peek
+                    in
+                    Expect.equal actual expected
+            ]
+        , describe "update"
+            [ test "updating a value in an empty `Stream`" <|
+                \_ ->
+                    let
+                        actual =
+                            Stream.empty
+                                |> Stream.update (\_ -> 5)
 
+                        expected =
+                            Stream.empty
+                                |> Stream.insert 5
                     in
                     Expect.equal actual expected
             ]

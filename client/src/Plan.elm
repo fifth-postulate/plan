@@ -1,8 +1,9 @@
-module Plan exposing (Candidate, ProblemDefinition, Session, Strategy, Stream)
+module Plan exposing (Candidate, ProblemDefinition, Session, Strategy)
 
 {-| This module provides a machinery to solve a planning problem.
 -}
 
+import Stream exposing (Stream)
 import SchoolOfUnderstanding as School exposing (Dict)
 
 
@@ -20,10 +21,6 @@ type alias ProblemDefinition =
     , availableTeachers : List School.Teacher
     , participatingStudents : List School.Student
     }
-
-
-type alias Stream a =
-    List a
 
 
 {-| A `Candidate` solution to the planning problem.

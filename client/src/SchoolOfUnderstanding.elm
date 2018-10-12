@@ -1,26 +1,14 @@
-module SchoolOfUnderstanding exposing (Dict, Group, GroupIdentity, Level(..), Student, StudentIdentity, Subject(..), SubjectIdentity, Teacher, TeacherIdentity)
+module SchoolOfUnderstanding exposing (Dict, Group, GroupIdentity, Level(..), Student, StudentIdentity, Teacher, TeacherIdentity)
 
 {-| The module defines various types that module the planning problem of the [School of Understanding](https://www.schoolofunderstanding.nl/).
 -}
 
 import Dict.Any exposing (AnyDict)
 import SchoolOfUnderstanding.Slot exposing (Slot, Slots, TimeOfDay, Weekday)
-
+import SchoolOfUnderstanding.Subject exposing (Subject, SubjectIdentity)
 
 type alias Dict k v =
     AnyDict Int k v
-
-
-{-| Subjects taught in the School of Understanding.
--}
-type Subject
-    = Subject { identity : SubjectIdentity }
-
-
-{-| A means to identify a subject.
--}
-type SubjectIdentity
-    = SubjectIdentity { name : String }
 
 
 {-| Teacher, capable of teaching subjects on certain weekdays.

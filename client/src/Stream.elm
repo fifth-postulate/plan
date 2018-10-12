@@ -8,6 +8,8 @@ module Stream exposing
 
 {-| `Stream` provides an abstraction that allows to advance elements revisit them later.
 
+The following invariant will always be held for a `Stream`. Either the `Stream` is empty, or `peek` returns `Just` a value.
+
 
 # Build
 
@@ -81,7 +83,17 @@ withHistory history (Stream ({ previous, current, next } as stream)) =
         stack =
             Stack.fromList history
     in
-    Stream { stream | previous = stack }
+    case current of
+        Nothing ->
+            let
+                ( c, p ) =
+                    stack
+                        |> Stack.pop
+            in
+            Stream { stream | previous = p, current = c }
+
+        Just _ ->
+            Stream { stream | previous = stack }
 
 
 {-| Insert an element into a stream.
@@ -108,19 +120,23 @@ advance ((Stream { previous, current, next }) as stream) =
             stream
 
         Just value ->
-            let
-                p =
-                    Stack.push value previous
+            if Deque.isEmpty next then
+                stream
 
-                ( c, n ) =
-                    next
-                        |> Deque.popFront
-            in
-            Stream
-                { previous = p
-                , current = c
-                , next = n
-                }
+            else
+                let
+                    p =
+                        Stack.push value previous
+
+                    ( c, n ) =
+                        next
+                            |> Deque.popFront
+                in
+                Stream
+                    { previous = p
+                    , current = c
+                    , next = n
+                    }
 
 
 {-| Retrograde the `Stream`, moving elements from the previous via current to the next.
@@ -132,19 +148,23 @@ retrograde ((Stream { next, current, previous }) as stream) =
             stream
 
         Just value ->
-            let
-                ( c, p ) =
-                    Stack.pop previous
+            if Stack.isEmpty previous then
+                stream
 
-                n =
-                    next
-                        |> Deque.pushFront value
-            in
-            Stream
-                { previous = p
-                , current = c
-                , next = n
-                }
+            else
+                let
+                    ( c, p ) =
+                        Stack.pop previous
+
+                    n =
+                        next
+                            |> Deque.pushFront value
+                in
+                Stream
+                    { previous = p
+                    , current = c
+                    , next = n
+                    }
 
 
 {-| Determines if a `Stream` contains elements

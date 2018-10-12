@@ -30,6 +30,7 @@ module Stream exposing
 
 -}
 
+import Deque exposing (Deque)
 import Stack exposing (Stack)
 
 
@@ -39,7 +40,7 @@ type Stream a
     = Stream
         { previous : Stack a
         , current : Maybe a
-        , next : List a
+        , next : Deque a
         }
 
 
@@ -50,7 +51,7 @@ empty =
     Stream
         { previous = Stack.empty
         , current = Nothing
-        , next = []
+        , next = Deque.empty
         }
 
 
@@ -67,7 +68,8 @@ fromList elements =
         , next =
             elements
                 |> List.tail
-                |> Maybe.withDefault []
+                |> Maybe.map Deque.fromList
+                |> Maybe.withDefault Deque.empty
         }
 
 
@@ -94,13 +96,13 @@ insert element (Stream ({ previous, current, next } as stream)) =
             Stream { stream | current = Just element }
 
         Just _ ->
-            Stream { stream | next = next ++ [ element ] }
+            Stream { stream | next = Deque.pushBack element next }
 
 
 {-| Advance the `Stream`, moving elements from next via current to previous.
 -}
 advance : Stream a -> Stream a
-advance (Stream { previous, current, next } as stream) =
+advance ((Stream { previous, current, next }) as stream) =
     case current of
         Nothing ->
             stream
@@ -110,13 +112,9 @@ advance (Stream { previous, current, next } as stream) =
                 p =
                     Stack.push value previous
 
-                c =
-                    List.head next
-
-                n =
+                ( c, n ) =
                     next
-                        |> List.tail
-                        |> Maybe.withDefault []
+                        |> Deque.popFront
             in
             Stream
                 { previous = p
@@ -137,7 +135,7 @@ isEmpty (Stream { previous, current, next }) =
     in
     Stack.isEmpty previous
         && not hasCurrent
-        && List.isEmpty next
+        && Deque.isEmpty next
 
 
 {-| Return a list of elements in the `Stream`.
@@ -157,5 +155,6 @@ toList (Stream { previous, current, next }) =
 
         suffix =
             next
+                |> Deque.toList
     in
     prefix ++ center ++ suffix

@@ -1,45 +1,14 @@
-module SchoolOfUnderstanding exposing (Dict, Group, GroupIdentity, Level(..), Slot, Slots, Student, StudentIdentity, Subject(..), SubjectIdentity, Teacher, TeacherIdentity, TimeOfDay, Weekday(..))
+module SchoolOfUnderstanding exposing (Dict, Group, GroupIdentity, Level(..), Student, StudentIdentity, Subject(..), SubjectIdentity, Teacher, TeacherIdentity)
 
 {-| The module defines various types that module the planning problem of the [School of Understanding](https://www.schoolofunderstanding.nl/).
 -}
 
 import Dict.Any exposing (AnyDict)
+import SchoolOfUnderstanding.Slot exposing (Slot, Slots, TimeOfDay, Weekday)
 
 
 type alias Dict k v =
     AnyDict Int k v
-
-
-{-| Days of the week.
--}
-type Weekday
-    = Monday
-    | Tuesday
-    | Wednesday
-    | Thursday
-    | Friday
-    | Saterday
-    | Sunday
-
-
-{-| Available `Slot`s per `Weekday`
--}
-type alias Slots =
-    Dict Weekday (List Slot)
-
-
-{-| A `Slot` is a period in which a `Teacher` teaches a `Subject` to a `Group`.
--}
-type alias Slot =
-    { start : TimeOfDay, finish : TimeOfDay }
-
-
-{-| A particular moment of time.
--}
-type alias TimeOfDay =
-    { hour : Int
-    , minutes : Int
-    }
 
 
 {-| Subjects taught in the School of Understanding.

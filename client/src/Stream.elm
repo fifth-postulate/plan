@@ -1,7 +1,7 @@
 module Stream exposing
     ( empty, fromList, insert, withHistory
-    , advance
-    , isEmpty
+    , advance, retrograde
+    , isEmpty, peek
     , toList
     , Stream
     )
@@ -16,12 +16,12 @@ module Stream exposing
 
 # Operation
 
-@docs advance
+@docs advance, retrograde
 
 
 # Queries
 
-@docs isEmpty
+@docs isEmpty, peek
 
 
 # Conversion
@@ -123,6 +123,30 @@ advance ((Stream { previous, current, next }) as stream) =
                 }
 
 
+{-| Retrograde the `Stream`, moving elements from the previous via current to the next.
+-}
+retrograde : Stream a -> Stream a
+retrograde ((Stream { next, current, previous }) as stream) =
+    case current of
+        Nothing ->
+            stream
+
+        Just value ->
+            let
+                ( c, p ) =
+                    Stack.pop previous
+
+                n =
+                    next
+                        |> Deque.pushFront value
+            in
+            Stream
+                { previous = p
+                , current = c
+                , next = n
+                }
+
+
 {-| Determines if a `Stream` contains elements
 -}
 isEmpty : Stream a -> Bool
@@ -136,6 +160,13 @@ isEmpty (Stream { previous, current, next }) =
     Stack.isEmpty previous
         && not hasCurrent
         && Deque.isEmpty next
+
+
+{-| Returns the current element in the `Stream`, if any.
+-}
+peek : Stream a -> Maybe a
+peek (Stream { current }) =
+    current
 
 
 {-| Return a list of elements in the `Stream`.

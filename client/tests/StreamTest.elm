@@ -72,22 +72,40 @@ suite =
                     in
                     Expect.false "expected an non empty stream to be non empty" isEmpty
             ]
-        , describe "operation" [
-               test "advance a stream correctly" <|
-                   \_ ->
-                   let
-                       actual =
-                           [1,2,3,4,5]
-                           |> Stream.fromList
-                           |> Stream.advance
-                           |> Stream.advance
+        , describe "operation"
+            [ test "advance a stream correctly" <|
+                \_ ->
+                    let
+                        actual =
+                            [ 1, 2, 3, 4, 5 ]
+                                |> Stream.fromList
+                                |> Stream.advance
+                                |> Stream.advance
 
-                       expected =
-                           Stream.fromList [3, 4, 5]
-                           |> Stream.withHistory [1, 2]
-                  in
-                      Expect.equal actual expected
-              ]
+                        expected =
+                            Stream.fromList [ 3, 4, 5 ]
+                                |> Stream.withHistory [ 1, 2 ]
+                    in
+                    Expect.equal actual expected
+            , test "retrograde a stream correctly" <|
+                \_ ->
+                    let
+                        actual =
+                            [3, 4, 5]
+                                |> Stream.fromList
+                                |> Stream.withHistory [ 1, 2 ]
+                                |> Stream.retrograde
+                                |> Stream.retrograde
+                                |> Stream.peek
+
+                        expected =
+                            [ 1, 2, 3, 4, 5 ]
+                                |> Stream.fromList
+                                |> Stream.peek
+
+                    in
+                    Expect.equal actual expected
+            ]
         , describe "conversions"
             [ fuzz (list int) "fromList and toList are inverse operations" <|
                 \original ->

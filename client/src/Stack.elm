@@ -1,6 +1,6 @@
 module Stack exposing
     ( empty, fromList
-    , push
+    , push, pop
     , isEmpty
     , toList
     , Stack
@@ -16,7 +16,7 @@ module Stack exposing
 
 # Operation
 
-@docs push
+@docs push, pop
 
 
 # Queries
@@ -61,6 +61,20 @@ fromList elements =
 push : a -> Stack a -> Stack a
 push head (Stack tail) =
     Stack (head :: tail)
+
+
+{-| Pops an element from the `Stack`.
+-}
+pop : Stack a -> ( Maybe a, Stack a )
+pop (Stack list) =
+    let
+        stack =
+            list
+                |> List.tail
+                |> Maybe.map Stack
+                |> Maybe.withDefault empty
+    in
+    ( List.head list, stack )
 
 
 {-| Determines if a `Stack` contains elements.

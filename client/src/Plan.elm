@@ -6,6 +6,7 @@ module Plan exposing (Candidate, ProblemDefinition, Session)
 import SchoolOfUnderstanding as School exposing (Dict)
 import SchoolOfUnderstanding.Slot exposing (Slots, Slot, Weekday)
 import SchoolOfUnderstanding.Teacher exposing (Teacher)
+import SchoolOfUnderstanding.Group exposing (Group)
 import Stream exposing (Stream)
 
 
@@ -13,7 +14,7 @@ import Stream exposing (Stream)
 -}
 type alias ProblemDefinition =
     { availableSlots : Slots
-    , groupsToTeach : List School.Group
+    , groupsToTeach : List Group
     , availableTeachers : List Teacher
     , participatingStudents : List School.Student
     }
@@ -30,5 +31,5 @@ type alias Candidate =
 type alias Session =
     { slot : Slot
     , teacher : Teacher
-    , group : School.Group
+    , group : Group
     }

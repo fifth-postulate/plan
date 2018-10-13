@@ -7,6 +7,7 @@ import SchoolOfUnderstanding as School exposing (Dict)
 import SchoolOfUnderstanding.Slot exposing (Slots, Slot, Weekday)
 import SchoolOfUnderstanding.Teacher exposing (Teacher)
 import SchoolOfUnderstanding.Group exposing (Group)
+import SchoolOfUnderstanding.Student exposing (Student)
 import Stream exposing (Stream)
 
 
@@ -16,7 +17,7 @@ type alias ProblemDefinition =
     { availableSlots : Slots
     , groupsToTeach : List Group
     , availableTeachers : List Teacher
-    , participatingStudents : List School.Student
+    , participatingStudents : List Student
     }
 
 

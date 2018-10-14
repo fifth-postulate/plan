@@ -14,14 +14,14 @@ suite =
             [ test "of slots should produce correct JSON" <|
                 \_ ->
                     let
-                        aap =
+                        slots =
                             emptySlots
                                 |> insert Monday
                                     [ slot { start = time 8 30, finish = time 9 15 }
                                     ]
 
                         encoding =
-                            aap
+                            slots
                                 |> Slot.encode
                                 |> Encode.encode 0
                     in

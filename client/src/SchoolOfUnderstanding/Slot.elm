@@ -1,6 +1,6 @@
 module SchoolOfUnderstanding.Slot exposing
     ( Weekday(..), Slots, Slot, TimeOfDay
-    , encode
+    , encode, encodeWeekday
     , emptySlots, insert, slot, time
     )
 
@@ -19,7 +19,7 @@ module SchoolOfUnderstanding.Slot exposing
 
 # Encoding
 
-@docs encode
+@docs encode, encodeWeekday
 
 -}
 
@@ -131,8 +131,9 @@ insert weekday list slots =
 {-| Returns a `Slot` given start and finish.
 -}
 slot : { start : TimeOfDay, finish : TimeOfDay } -> Slot
-slot {start, finish} =
+slot { start, finish } =
     Slot start finish
+
 
 {-| Returns a `TimeOfDay` given hour and minutes.
 -}
@@ -180,3 +181,12 @@ encodeTimeOfDay { hour, minutes } =
     , ( "minutes", Encode.int minutes )
     ]
         |> Encode.object
+
+
+{-| Encode a `Weekday` into a `Json.Encode.Value`.
+-}
+encodeWeekday : Weekday -> Encode.Value
+encodeWeekday weekday =
+    weekday
+        |> weekdayToString
+        |> Encode.string

@@ -1,4 +1,8 @@
-module SchoolOfUnderstanding.Subject exposing (Subject, SubjectIdentity)
+module SchoolOfUnderstanding.Subject exposing
+    ( Subject, SubjectIdentity
+    , subject
+    , encode
+    )
 
 {-| Subject
 
@@ -9,16 +13,46 @@ module SchoolOfUnderstanding.Subject exposing (Subject, SubjectIdentity)
 
 @docs Subject, SubjectIdentity
 
+
+# Building
+
+@docs subject
+
+
+# Encoding
+
+@docs encode
+
 -}
+
+import Json.Encode as Encode
 
 
 {-| Subjects taught in the School of Understanding.
 -}
 type Subject
-    = Subject { identity : SubjectIdentity }
+    = Subject SubjectIdentity
 
 
 {-| A means to identify a subject.
 -}
 type SubjectIdentity
-    = SubjectIdentity { name : String }
+    = SubjectIdentity String
+
+
+{-| Create a `Subject` from a name.
+-}
+subject : String -> Subject
+subject name =
+    let
+        identity =
+            SubjectIdentity name
+    in
+    Subject identity
+
+
+{-| Encodes a `Subject` into a `Json.Encode.Value`.
+-}
+encode : Subject -> Encode.Value
+encode (Subject (SubjectIdentity identity)) =
+    Encode.object [ ( "identity", Encode.string identity ) ]

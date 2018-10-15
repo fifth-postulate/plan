@@ -3,7 +3,9 @@ module Main exposing (main)
 import Browser
 import Html exposing (Html)
 import Html.Events as Event
+import Json.Encode as Encode
 import Plan
+import Problem exposing (problemDefinition)
 import SchoolOfUnderstanding
 import Stream exposing (Stream)
 
@@ -44,9 +46,12 @@ update message model =
 view : (Maybe a -> Html Message) -> Model a -> Html Message
 view elementView model =
     Html.div []
-        [ Html.button [ Event.onClick Retrograde ] [ Html.text "←" ]
-        , elementView (Stream.peek model.stream)
-        , Html.button [ Event.onClick Advance ] [ Html.text "→" ]
+        [ Html.div []
+            [ Html.button [ Event.onClick Retrograde ] [ Html.text "←" ]
+            , elementView (Stream.peek model.stream)
+            , Html.button [ Event.onClick Advance ] [ Html.text "→" ]
+            ]
+        , Html.pre [] [ Html.text <| Encode.encode 2 (Plan.encode problemDefinition) ]
         ]
 
 

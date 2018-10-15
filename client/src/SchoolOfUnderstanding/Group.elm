@@ -1,7 +1,7 @@
 module SchoolOfUnderstanding.Group exposing
     ( Group, GroupIdentity, Level
     , group, level, lessons
-    , encodeGroupIdentity
+    , encode, encodeGroupIdentity
     )
 
 {-| A `Group` is a collection of `Student`s studying a `Subject` at a certain level.
@@ -16,9 +16,10 @@ module SchoolOfUnderstanding.Group exposing
 
 @docs group, level, lessons
 
+
 # Encoding
 
-@docs encodeGroupIdentity
+@docs encode, encodeGroupIdentity
 
 -}
 
@@ -48,11 +49,29 @@ type Level
     = Level Int
 
 
+{-| Encode a `Group` into a `Json.Encode.Value`.
+-}
+encode : Group -> Encode.Value
+encode aGroup =
+    Encode.object
+        [ ( "identity", encodeGroupIdentity aGroup.identity )
+        , ( "subject", Subject.encode aGroup.subject )
+        , ( "level", encodeLevel aGroup.level )
+        , ( "lessonsNeeded", Encode.int aGroup.lessonsNeeded )
+        ]
+
+
 {-| Encodes a `GroupIdentity` into a `Json.Encode.Value`.
 -}
 encodeGroupIdentity : GroupIdentity -> Encode.Value
 encodeGroupIdentity (GroupIdentity groupNumber) =
     Encode.object [ ( "groupNumber", Encode.int groupNumber ) ]
+
+
+{-| Encode a `Level` into a `Json.Encode.Value`. -}
+encodeLevel : Level -> Encode.Value
+encodeLevel (Level aLevel) =
+    Encode.int aLevel
 
 
 {-| Create a group, studying `Subject` on a certain `Level` needing a number of lessons.

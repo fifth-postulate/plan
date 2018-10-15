@@ -3,9 +3,9 @@ module StudentTest exposing (suite)
 import Expect exposing (Expectation)
 import Fuzz exposing (Fuzzer, int, list, string)
 import Json.Encode as Encode
+import SchoolOfUnderstanding.Group exposing (group, lessons, level)
+import SchoolOfUnderstanding.Student as Student exposing (memberOf, student)
 import SchoolOfUnderstanding.Subject exposing (subject)
-import SchoolOfUnderstanding.Group exposing (group, level, lessons)
-import SchoolOfUnderstanding.Student as Student exposing (student, memberOf)
 import Test exposing (..)
 
 

@@ -4,10 +4,10 @@ module Plan exposing (Candidate, ProblemDefinition, Session)
 -}
 
 import SchoolOfUnderstanding as School exposing (Dict)
-import SchoolOfUnderstanding.Slot exposing (Slots, Slot, Weekday)
-import SchoolOfUnderstanding.Teacher exposing (Teacher)
 import SchoolOfUnderstanding.Group exposing (Group)
+import SchoolOfUnderstanding.Slot exposing (Slot, Slots, Weekday)
 import SchoolOfUnderstanding.Student exposing (Student)
+import SchoolOfUnderstanding.Teacher exposing (Teacher)
 import Stream exposing (Stream)
 
 

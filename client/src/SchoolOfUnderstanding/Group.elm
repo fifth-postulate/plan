@@ -68,7 +68,8 @@ encodeGroupIdentity (GroupIdentity groupNumber) =
     Encode.object [ ( "groupNumber", Encode.int groupNumber ) ]
 
 
-{-| Encode a `Level` into a `Json.Encode.Value`. -}
+{-| Encode a `Level` into a `Json.Encode.Value`.
+-}
 encodeLevel : Level -> Encode.Value
 encodeLevel (Level aLevel) =
     Encode.int aLevel

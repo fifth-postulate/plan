@@ -3,7 +3,7 @@ module GroupTest exposing (suite)
 import Expect exposing (Expectation)
 import Fuzz exposing (Fuzzer, int, list, string)
 import Json.Encode as Encode
-import SchoolOfUnderstanding.Group as Group exposing (group, level, lessons)
+import SchoolOfUnderstanding.Group as Group exposing (group, lessons, level)
 import SchoolOfUnderstanding.Subject exposing (subject)
 import Test exposing (..)
 

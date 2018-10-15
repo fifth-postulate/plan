@@ -44,9 +44,9 @@ update message model =
 view : (Maybe a -> Html Message) -> Model a -> Html Message
 view elementView model =
     Html.div []
-        [ Html.button [Event.onClick Retrograde] [ Html.text "←" ]
+        [ Html.button [ Event.onClick Retrograde ] [ Html.text "←" ]
         , elementView (Stream.peek model.stream)
-        , Html.button [Event.onClick Advance] [ Html.text "→" ]
+        , Html.button [ Event.onClick Advance ] [ Html.text "→" ]
         ]
 
 

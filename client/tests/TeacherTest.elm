@@ -5,7 +5,7 @@ import Fuzz exposing (Fuzzer, int, list, string)
 import Json.Encode as Encode
 import SchoolOfUnderstanding.Slot exposing (Weekday(..))
 import SchoolOfUnderstanding.Subject exposing (subject)
-import SchoolOfUnderstanding.Teacher as Teacher exposing (teacher, canTeach, isAvailableOn)
+import SchoolOfUnderstanding.Teacher as Teacher exposing (canTeach, isAvailableOn, teacher)
 import Test exposing (..)
 
 

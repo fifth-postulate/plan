@@ -2,6 +2,7 @@ module SchoolOfUnderstanding.Subject exposing
     ( Subject, SubjectIdentity
     , subject
     , encode
+    , toString
     )
 
 {-| Subject
@@ -22,6 +23,11 @@ module SchoolOfUnderstanding.Subject exposing
 # Encoding
 
 @docs encode
+
+
+# Conversion
+
+@docs toString
 
 -}
 
@@ -56,3 +62,10 @@ subject name =
 encode : Subject -> Encode.Value
 encode (Subject (SubjectIdentity identity)) =
     Encode.object [ ( "identity", Encode.string identity ) ]
+
+
+{-| Returns a `String` representation of a `Subject`
+-}
+toString : Subject -> String
+toString (Subject (SubjectIdentity identity)) =
+    identity

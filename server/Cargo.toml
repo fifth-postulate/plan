@@ -4,3 +4,26 @@ version = "0.1.0"
 authors = ["Daan van Berkel <daan.v.berkel.1980@gmail.com>"]
 
 [dependencies]
+log = "*"
+simplelog = "*"
+dotenv = "*"
+serde = "*"
+serde_json = "*"
+serde_derive = "*"
+
+[dependencies.iron]
+version = "*"
+
+[dependencies.logger]
+git = "https://github.com/iron/logger.git"
+
+[dependencies.staticfile]
+version = "*"
+
+[dependencies.mount]
+git = "https://github.com/iron/mount.git"
+tag = "0.4.0"
+
+[dependencies.router]
+version = "*"
+

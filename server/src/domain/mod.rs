@@ -1,10 +1,12 @@
-struct Slots {}
+pub mod slot;
+pub mod group;
+pub mod teacher;
+pub mod student;
 
-struct Group {}
-
-struct Teacher {}
-
-struct Student {}
+use domain::slot::Slots;
+use domain::group::Group;
+use domain::teacher::Teacher;
+use domain::student::Student;
 
 pub struct ProblemDescription {
     available_slots: Slots,

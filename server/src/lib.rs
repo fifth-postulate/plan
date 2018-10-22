@@ -11,3 +11,4 @@ extern crate serde;
 extern crate serde_json;
 
 pub mod server;
+pub mod domain;

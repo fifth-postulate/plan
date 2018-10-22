@@ -7,7 +7,6 @@ use logger::Logger;
 use mount::Mount;
 use staticfile::Static;
 
-use super::domain::Message;
 
 pub fn chain() -> Chain {
     let mut chain = Chain::new(mount());
@@ -18,7 +17,7 @@ pub fn chain() -> Chain {
     chain
 }
 
-fn mount(to_registration: Sender<Message>) -> Mount {
+fn mount() -> Mount {
     let mut mounter = Mount::new();
 
     mounter.mount("/", Static::new(Path::new("static/")));

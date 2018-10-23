@@ -7,7 +7,6 @@ use logger::Logger;
 use mount::Mount;
 use staticfile::Static;
 
-
 pub fn chain() -> Chain {
     let mut chain = Chain::new(mount());
     let (logger_before, logger_after) = Logger::new(None);
@@ -24,4 +23,3 @@ fn mount() -> Mount {
 
     mounter
 }
-

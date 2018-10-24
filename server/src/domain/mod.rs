@@ -11,7 +11,7 @@ use domain::teacher::Teacher;
 
 #[derive(Deserialize, Debug, PartialEq)]
 #[serde(rename_all="camelCase")]
-pub struct ProblemDescription {
+pub struct ProblemDefinition {
     available_slots: Slots,
     groups_to_teach: Vec<Group>,
     available_teachers: Vec<Teacher>,
@@ -229,7 +229,7 @@ mod tests {
     }
   ]
 }";
-        let result: Result<ProblemDescription> = serde_json::from_str(&data);
+        let result: Result<ProblemDefinition> = serde_json::from_str(&data);
 
         assert!(result.is_ok())
     }

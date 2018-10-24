@@ -1,4 +1,5 @@
 // Server related code.
+mod plan;
 
 use std::path::Path;
 
@@ -20,6 +21,7 @@ fn mount() -> Mount {
     let mut mounter = Mount::new();
 
     mounter.mount("/", Static::new(Path::new("static/")));
+    mounter.mount("/plan", plan::router());
 
     mounter
 }

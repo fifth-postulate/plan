@@ -6717,6 +6717,7 @@ var author$project$Main$update = F2(
 		}
 	});
 var author$project$Main$Advance = {$: 'Advance'};
+var author$project$Main$Plan = {$: 'Plan'};
 var author$project$Main$Retrograde = {$: 'Retrograde'};
 var author$project$Stream$peek = function (_n0) {
 	var current = _n0.a.current;
@@ -6772,7 +6773,10 @@ var author$project$Main$view = F2(
 						[
 							A2(
 							elm$html$Html$button,
-							_List_Nil,
+							_List_fromArray(
+								[
+									elm$html$Html$Events$onClick(author$project$Main$Plan)
+								]),
 							_List_fromArray(
 								[
 									elm$html$Html$text('plan')

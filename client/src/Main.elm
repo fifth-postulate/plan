@@ -16,7 +16,7 @@ import Url exposing (Url)
 main : Program () (Model Int) Message
 main =
     Browser.element
-        { init = \_ -> (init <| List.range 1 10, Cmd.none)
+        { init = \_ -> ( init <| List.range 1 10, Cmd.none )
         , update = update
         , view = view viewInt
         , subscriptions = \_ -> Sub.none
@@ -76,13 +76,14 @@ update message model =
             ( { model | stream = Stream.retrograde model.stream }, Cmd.none )
 
         -- TODO Handle all cases
-        _ -> (model, Cmd.none)
+        _ ->
+            ( model, Cmd.none )
 
 
 view : (Maybe a -> Html Message) -> Model a -> Html Message
 view elementView model =
     Html.div []
-        [ Html.div [] [ Html.button [] [ Html.text "plan" ] ]
+        [ Html.div [] [ Html.button [ Event.onClick Plan ] [ Html.text "plan" ] ]
         , Html.div []
             [ Html.button [ Event.onClick Retrograde ] [ Html.text "←" ]
             , elementView (Stream.peek model.stream)

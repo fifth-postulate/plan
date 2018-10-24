@@ -3,8 +3,8 @@ use domain::subject::Subject;
 #[derive(Serialize, Deserialize, Debug, PartialEq)]
 #[serde(rename_all="camelCase")]
 pub struct Group {
-    identity: GroupIdentity,
-    subject: Subject,
+    pub identity: GroupIdentity,
+    pub subject: Subject,
     level: u8,
     lessons_needed: u8,
 }

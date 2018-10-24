@@ -2,6 +2,7 @@ pub mod group;
 pub mod slot;
 pub mod student;
 pub mod teacher;
+pub mod subject;
 
 use domain::group::Group;
 use domain::slot::Slots;

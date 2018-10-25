@@ -34,7 +34,7 @@ fn main() {
     let solver_thread = thread::Builder::new()
         .name("solver".to_string())
         .spawn(move || {
-            let solver = Solver::new(solver_rx);
+            let mut solver = Solver::new(solver_rx);
             info!("starting a solver.");
 
             solver.run();

@@ -2,7 +2,11 @@ pub mod strategy;
 
 use domain::ProblemDefinition;
 use std::sync::mpsc::{channel, Receiver, Sender};
-use std::sync::Arc;
+use std::thread;
+
+pub enum Message {
+    Plan(ProblemDefinition),
+}
 
 pub struct Solver {
     rx: Receiver<Message>,
@@ -13,21 +17,20 @@ impl Solver {
         Solver { rx }
     }
 
-    pub fn run(&self) {
+    pub fn run(&mut self) {
         loop {
             match self.rx.recv() {
                 Ok(message) => match message {
-                    Message::Plan(problem_definition) => {
-                        info!("planning {:?}", problem_definition);
-                    }
-                },
+                    Message::Plan(_problem_definition) => {
+                        let worker_thread = thread::Builder::new().spawn(move ||{
+                        }).unwrap();
+
+                        worker_thread.join().unwrap();
+                    },
+                }
 
                 Err(error) => error!("could not receive message: {}", error),
             }
         }
     }
-}
-
-pub enum Message {
-    Plan(ProblemDefinition),
 }

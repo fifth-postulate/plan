@@ -1,11 +1,11 @@
 pub mod strategy;
 
-use std::sync::Arc;
-use std::sync::mpsc::{channel, Sender, Receiver};
 use domain::ProblemDefinition;
+use std::sync::mpsc::{channel, Receiver, Sender};
+use std::sync::Arc;
 
 pub struct Solver {
-    rx: Receiver<Message>
+    rx: Receiver<Message>,
 }
 
 impl Solver {
@@ -16,17 +16,13 @@ impl Solver {
     pub fn run(&self) {
         loop {
             match self.rx.recv() {
-                Ok(message) => {
-                    match message {
-                        Message::Plan(problem_definition) => {
-                            info!("planning {:?}", problem_definition);
-                        }
+                Ok(message) => match message {
+                    Message::Plan(problem_definition) => {
+                        info!("planning {:?}", problem_definition);
                     }
-                }
+                },
 
-                Err(error) => {
-                    error!("could not receive message: {}", error)
-                }
+                Err(error) => error!("could not receive message: {}", error),
             }
         }
     }

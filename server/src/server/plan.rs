@@ -1,37 +1,44 @@
-use std::io::Read;
-use std::sync::{Arc, Mutex};
+use iron::{status, Request, Response};
 use router::Router;
-use iron::{Request, Response, status};
 use serde_json;
 use serde_json::Error;
-use std::sync::mpsc::{Sender, Receiver};
+use std::io::Read;
+use std::sync::mpsc::{Receiver, Sender};
+use std::sync::{Arc, Mutex};
 
 use domain::ProblemDefinition;
 use solver;
 
-pub fn router(tx: Sender<solver::Message> ) -> Router {
+pub fn router(tx: Sender<solver::Message>) -> Router {
     let mut router = Router::new();
 
     let tx_mutex = Arc::new(Mutex::new(tx));
-    router.post("/", move |request: &mut Request|{
-        let mut body = String::new();
-        if let Ok(_) = request.body.read_to_string(&mut body) {
-            let problem_description_result: Result<ProblemDefinition, Error> = serde_json::from_str(&body);
-            if let Ok(problem_description) = problem_description_result {
-                tx_mutex
-                    .lock().unwrap()
-                    .send(solver::Message::Plan(problem_description)).unwrap();
+    router.post(
+        "/",
+        move |request: &mut Request| {
+            let mut body = String::new();
+            if let Ok(_) = request.body.read_to_string(&mut body) {
+                let problem_description_result: Result<ProblemDefinition, Error> =
+                    serde_json::from_str(&body);
+                if let Ok(problem_description) = problem_description_result {
+                    tx_mutex
+                        .lock()
+                        .unwrap()
+                        .send(solver::Message::Plan(problem_description))
+                        .unwrap();
 
-                Ok(Response::with((status::Ok, "{}")))
+                    Ok(Response::with((status::Ok, "{}")))
+                } else {
+                    error!("unable to deserialize problem description \"{}\"", body);
+
+                    Ok(Response::with(status::BadRequest))
+                }
             } else {
-                error!("unable to deserialize problem description \"{}\"", body);
-
-                Ok(Response::with(status::BadRequest))
+                Ok(Response::with(status::InternalServerError))
             }
-        } else {
-            Ok(Response::with(status::InternalServerError))
-        }
-    }, "register");
+        },
+        "register",
+    );
 
     router
 }

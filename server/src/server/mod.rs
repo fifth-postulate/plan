@@ -1,13 +1,13 @@
 // Server related code.
 mod plan;
 
-use std::path::Path;
-use std::sync::mpsc::{Sender, Receiver};
 use iron::Chain;
 use logger::Logger;
 use mount::Mount;
-use staticfile::Static;
 use solver;
+use staticfile::Static;
+use std::path::Path;
+use std::sync::mpsc::{Receiver, Sender};
 
 pub fn chain(tx: Sender<solver::Message>) -> Chain {
     let mut chain = Chain::new(mount(tx));

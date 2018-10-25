@@ -1,8 +1,8 @@
 pub mod group;
 pub mod slot;
 pub mod student;
-pub mod teacher;
 pub mod subject;
+pub mod teacher;
 
 use domain::group::Group;
 use domain::slot::Slots;
@@ -10,7 +10,7 @@ use domain::student::Student;
 use domain::teacher::Teacher;
 
 #[derive(Deserialize, Debug, PartialEq)]
-#[serde(rename_all="camelCase")]
+#[serde(rename_all = "camelCase")]
 pub struct ProblemDefinition {
     available_slots: Slots,
     groups_to_teach: Vec<Group>,

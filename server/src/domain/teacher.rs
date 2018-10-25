@@ -10,7 +10,9 @@ pub struct Teacher {
 
 impl Teacher {
     pub fn new<S>(nickname: S) -> Self
-    where S: Into<String> {
+    where
+        S: Into<String>,
+    {
         Teacher {
             identity: TeacherIdentity::new(nickname),
             capabilities: vec![],
@@ -33,13 +35,17 @@ impl Teacher {
 
 #[derive(Serialize, Deserialize, Debug, PartialEq)]
 pub struct TeacherIdentity {
-    nickname: String
+    nickname: String,
 }
 
 impl TeacherIdentity {
     pub fn new<S>(nickname: S) -> Self
-    where S: Into<String>{
-         TeacherIdentity { nickname : nickname.into() }
+    where
+        S: Into<String>,
+    {
+        TeacherIdentity {
+            nickname: nickname.into(),
+        }
     }
 }
 
@@ -54,8 +60,7 @@ mod tests {
     fn deserialize_teacher() {
         let data = "{\"identity\":{\"nickname\":\"Alice\"},\"capabilities\":[{\"identity\":\"Math\"}],\"availabilities\":[\"monday\",\"wednesday\"]}";
         let actual: Teacher = serde_json::from_str(&data).unwrap();
-        let expected =
-            Teacher::new("Alice")
+        let expected = Teacher::new("Alice")
             .teaches(vec![Subject::new("Math")])
             .available_on(vec![Weekday::Monday, Weekday::Wednesday]);
 

@@ -1,4 +1,4 @@
-use domain::{ProblemDefinition, Candidate};
+use domain::{Candidate, ProblemDefinition};
 
 pub trait StrategyFactory {
     fn create(problem_definition: ProblemDefinition) -> Strategy;

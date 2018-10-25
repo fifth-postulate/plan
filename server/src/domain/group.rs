@@ -1,7 +1,7 @@
 use domain::subject::Subject;
 
 #[derive(Serialize, Deserialize, Debug, PartialEq)]
-#[serde(rename_all="camelCase")]
+#[serde(rename_all = "camelCase")]
 pub struct Group {
     pub identity: GroupIdentity,
     pub subject: Subject,
@@ -11,7 +11,9 @@ pub struct Group {
 
 impl Group {
     pub fn new<S>(identity: u8, subject: S, level: u8, lessons_needed: u8) -> Self
-    where S: Into<String> {
+    where
+        S: Into<String>,
+    {
         Group {
             identity: GroupIdentity::new(identity),
             subject: Subject::new(subject),
@@ -22,7 +24,7 @@ impl Group {
 }
 
 #[derive(Serialize, Deserialize, Debug, PartialEq)]
-#[serde(rename_all="camelCase")]
+#[serde(rename_all = "camelCase")]
 pub struct GroupIdentity {
     group_number: u8,
 }

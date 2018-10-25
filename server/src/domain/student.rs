@@ -1,7 +1,7 @@
+use domain::group::{Group, GroupIdentity};
+use domain::subject::Subject;
 use serde::de::{Deserialize, Deserializer, MapAccess, Visitor};
 use std::collections::HashMap;
-use domain::subject::Subject;
-use domain::group::{GroupIdentity, Group};
 use std::fmt;
 use std::marker::PhantomData;
 
@@ -9,7 +9,6 @@ use std::marker::PhantomData;
 pub struct Student {
     identity: StudentIdentity,
     memberships: Memberships,
-
 }
 
 impl Student {
@@ -21,9 +20,7 @@ impl Student {
     }
 
     pub fn member_of(mut self, groups: Vec<Group>) -> Self {
-        groups.into_iter().for_each(|group|{
-            self.enroll_in(group)
-        });
+        groups.into_iter().for_each(|group| self.enroll_in(group));
 
         self
     }
@@ -34,7 +31,7 @@ impl Student {
 }
 
 #[derive(Serialize, Deserialize, Debug, PartialEq)]
-#[serde(rename_all="camelCase")]
+#[serde(rename_all = "camelCase")]
 pub struct StudentIdentity {
     student_number: u64,
 }
@@ -47,12 +44,14 @@ impl StudentIdentity {
 
 #[derive(Debug, PartialEq)]
 pub struct Memberships {
-    memberships: HashMap<Subject, GroupIdentity>
+    memberships: HashMap<Subject, GroupIdentity>,
 }
 
 impl Memberships {
     pub fn new() -> Memberships {
-        Memberships { memberships: HashMap::new() }
+        Memberships {
+            memberships: HashMap::new(),
+        }
     }
 
     pub fn enroll_in(&mut self, group: Group) {
@@ -117,14 +116,13 @@ mod tests {
     fn deserialize_student() {
         let data = "{\"identity\":{\"studentNumber\":1729},\"memberships\":{\"Math\":{\"groupNumber\":42},\"Spelling\":{\"groupNumber\":51}}}";
         let actual: Student = serde_json::from_str(&data).unwrap();
-        let expected = Student::new(1729)
-            .member_of(vec![
-                Group::new(42, "Math", 3, 4),
-                Group::new(51, "Spelling", 5, 2),
-            ]);
+        let expected = Student::new(1729).member_of(vec![
+            Group::new(42, "Math", 3, 4),
+            Group::new(51, "Spelling", 5, 2),
+        ]);
 
         assert_eq!(actual, expected);
     }
 
 }
-// 
+//

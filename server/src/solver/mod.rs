@@ -1,3 +1,5 @@
+pub mod strategy;
+
 use std::sync::Arc;
 use std::sync::mpsc::{channel, Sender, Receiver};
 use domain::ProblemDefinition;
@@ -12,7 +14,6 @@ impl Solver {
     }
 
     pub fn run(&self) {
-        let state_arc = Arc::new(State::ready());
         loop {
             match self.rx.recv() {
                 Ok(message) => {
@@ -34,55 +35,3 @@ impl Solver {
 pub enum Message {
     Plan(ProblemDefinition),
 }
-
-pub struct State<S> {
-    state: S
-}
-
-impl State<Ready> {
-    pub fn ready() -> Self {
-        State { state : Ready::new() }
-    }
-}
-
-impl From<State<Ready>> for State<Busy> {
-    fn from(_: State<Ready>) -> Self {
-        State {
-            state: Busy::new()
-        }
-    }
-}
-
-impl From<State<Busy>> for State<Pauzed> {
-    fn from(_: State<Busy>) -> Self {
-        State {
-            state: Pauzed::new()
-        }
-    }
-}
-
-
-pub struct Ready {}
-
-impl Ready {
-    pub fn new() -> Self {
-        Self {}
-    }
-}
-
-pub struct Busy {}
-
-impl Busy {
-    pub fn new() -> Self {
-        Self {}
-    }
-}
-
-pub struct Pauzed {}
-
-impl Pauzed {
-    pub fn new() -> Self {
-        Self {}
-    }
-}
-

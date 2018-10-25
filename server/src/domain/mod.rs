@@ -18,6 +18,8 @@ pub struct ProblemDefinition {
     participating_students: Vec<Student>,
 }
 
+pub struct Candidate {}
+
 #[cfg(test)]
 mod tests {
     extern crate serde;

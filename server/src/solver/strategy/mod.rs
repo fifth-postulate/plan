@@ -5,5 +5,5 @@ pub trait StrategyFactory {
 }
 
 pub trait Strategy {
-    fn next(&mut self) -> Candidate;
+    fn next(&mut self) -> Option<Candidate>;
 }

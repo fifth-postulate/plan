@@ -1,20 +1,26 @@
 use std::io::Read;
+use std::sync::{Arc, Mutex};
 use router::Router;
 use iron::{Request, Response, status};
 use serde_json;
 use serde_json::Error;
+use std::sync::mpsc::{Sender, Receiver};
 
 use domain::ProblemDefinition;
+use solver;
 
-pub fn router() -> Router {
+pub fn router(tx: Sender<solver::Message> ) -> Router {
     let mut router = Router::new();
 
+    let tx_mutex = Arc::new(Mutex::new(tx));
     router.post("/", move |request: &mut Request|{
         let mut body = String::new();
         if let Ok(_) = request.body.read_to_string(&mut body) {
             let problem_description_result: Result<ProblemDefinition, Error> = serde_json::from_str(&body);
             if let Ok(problem_description) = problem_description_result {
-                info!("received {:?}", problem_description);
+                tx_mutex
+                    .lock().unwrap()
+                    .send(solver::Message::Plan(problem_description)).unwrap();
 
                 Ok(Response::with((status::Ok, "{}")))
             } else {

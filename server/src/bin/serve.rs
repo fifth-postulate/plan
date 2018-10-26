@@ -9,8 +9,8 @@ use dotenv::dotenv;
 use iron::prelude::*;
 use plan::sender::{self, Repeater};
 use plan::server;
-use plan::solver::{self, Solver};
 use plan::solver::strategy::hardcoded::Factory;
+use plan::solver::{self, Solver};
 use simplelog::{CombinedLogger, Config, LevelFilter, TermLogger};
 use std::env;
 use std::sync::mpsc::{channel, Receiver, Sender};
@@ -46,7 +46,8 @@ fn main() {
     let sender_thread = thread::Builder::new()
         .name("sender".to_string())
         .spawn(move || {
-            let socket_address = env::var("socket_address").expect("\"socket_address\" in environment variables");
+            let socket_address =
+                env::var("socket_address").expect("\"socket_address\" in environment variables");
             let mut repeater = Repeater::new(socket_address);
             info!("starting a sender.");
 

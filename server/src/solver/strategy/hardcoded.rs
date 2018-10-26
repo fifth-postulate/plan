@@ -1,5 +1,5 @@
-use domain::{ProblemDefinition, Candidate};
-use solver::strategy::{StrategyFactory, Strategy};
+use domain::{Candidate, ProblemDefinition};
+use solver::strategy::{Strategy, StrategyFactory};
 
 #[derive(Default)]
 pub struct Factory {}
@@ -12,10 +12,7 @@ impl Factory {
 
 impl StrategyFactory<Canned> for Factory {
     fn create(&mut self, _: ProblemDefinition) -> Canned {
-        Canned::new(vec![
-            Candidate {},
-            Candidate {},
-        ])
+        Canned::new(vec![Candidate {}, Candidate {}])
     }
 }
 

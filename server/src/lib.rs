@@ -14,6 +14,6 @@ extern crate serde_json;
 extern crate ws;
 
 pub mod domain;
+pub mod sender;
 pub mod server;
 pub mod solver;
-pub mod sender;

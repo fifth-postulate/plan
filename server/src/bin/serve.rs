@@ -37,7 +37,7 @@ fn main() {
     let solver_thread = thread::Builder::new()
         .name("solver".to_string())
         .spawn(move || {
-            let mut solver = Solver::new(solver_rx, Factory::new());
+            let mut solver = Solver::new(solver_rx, sender_tx, Factory::new());
             info!("starting a solver.");
 
             solver.run();
@@ -47,7 +47,7 @@ fn main() {
         .name("sender".to_string())
         .spawn(move || {
             let mut repeater = Repeater::new(sender_rx);
-            info!("starting a repeater.");
+            info!("starting a sender.");
 
             repeater.run();
         }).unwrap();

@@ -17,7 +17,7 @@ pub fn router(tx: Sender<solver::Message>) -> Router {
         "/",
         move |request: &mut Request| {
             let mut body = String::new();
-            if let Ok(_) = request.body.read_to_string(&mut body) {
+            if request.body.read_to_string(&mut body).is_ok() {
                 let problem_description_result: Result<ProblemDefinition, Error> =
                     serde_json::from_str(&body);
                 if let Ok(problem_description) = problem_description_result {

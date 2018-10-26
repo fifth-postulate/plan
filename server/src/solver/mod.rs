@@ -31,7 +31,7 @@ impl<T, S> Solver<T, S> where S: 'static + Strategy + Send, T: StrategyFactory<S
                         let strategy: S = self.strategy_factory.create(problem_definition);
                         let tx: Sender<sender::Message> = self.tx.clone();
                         let worker_thread = thread::Builder::new().spawn(move ||{
-                            solve_with(tx, strategy);
+                            solve_with(&tx, strategy);
                         }).unwrap();
 
                         worker_thread.join().unwrap();
@@ -44,12 +44,8 @@ impl<T, S> Solver<T, S> where S: 'static + Strategy + Send, T: StrategyFactory<S
     }
 }
 
-fn solve_with<S>(tx: Sender<sender::Message>, mut strategy: S) where S: Strategy {
-    loop {
-        if let Some(candidate) = strategy.next() {
-            tx.send(sender::Message::Propose(candidate)).unwrap();
-        } else {
-            break;
-        }
+fn solve_with<S>(tx: &Sender<sender::Message>, mut strategy: S) where S: Strategy {
+    while let Some(candidate) = strategy.next() {
+        tx.send(sender::Message::Propose(candidate)).unwrap();
     }
 }

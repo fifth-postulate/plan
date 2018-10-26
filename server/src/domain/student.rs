@@ -42,7 +42,7 @@ impl StudentIdentity {
     }
 }
 
-#[derive(Debug, PartialEq)]
+#[derive(Default, Debug, PartialEq)]
 pub struct Memberships {
     memberships: HashMap<Subject, GroupIdentity>,
 }

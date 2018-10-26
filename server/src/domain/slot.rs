@@ -3,7 +3,7 @@ use std::collections::HashMap;
 use std::fmt;
 use std::marker::PhantomData;
 
-#[derive(Debug, PartialEq)]
+#[derive(Default, Debug, PartialEq)]
 pub struct Slots {
     slots: HashMap<Weekday, Vec<Slot>>,
 }

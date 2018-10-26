@@ -1,6 +1,7 @@
 use domain::{ProblemDefinition, Candidate};
 use solver::strategy::{StrategyFactory, Strategy};
 
+#[derive(Default)]
 pub struct Factory {}
 
 impl Factory {

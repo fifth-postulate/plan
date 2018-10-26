@@ -1,4 +1,4 @@
-module Main exposing (main)
+port module Main exposing (main)
 
 import Browser
 import Html exposing (Html)
@@ -6,26 +6,26 @@ import Html.Events as Event
 import Http
 import Json.Decode as Decode
 import Json.Encode as Encode
-import Plan exposing (ProblemDefinition)
+import Plan exposing (ProblemDefinition, Candidate)
 import Problem exposing (problemDefinition)
 import SchoolOfUnderstanding
 import Stream exposing (Stream)
 import Url exposing (Url)
 
 
-main : Program () (Model Int) Message
+main : Program () (Model Candidate) Message
 main =
     Browser.element
-        { init = \_ -> ( init <| List.range 1 10, Cmd.none )
+        { init = \_ -> ( init, Cmd.none )
         , update = update
-        , view = view viewInt
-        , subscriptions = \_ -> Sub.none
+        , view = view viewCandidate
+        , subscriptions = subscriptions
         }
 
 
-init : List a -> Model a
-init list =
-    { stream = Stream.fromList list, problemDefinition = problemDefinition }
+init : Model Candidate
+init =
+    { stream = Stream.empty, problemDefinition = problemDefinition }
 
 
 type alias Model a =
@@ -38,6 +38,7 @@ type Message
     = DoNothing
     | Plan
     | BadResponse Http.Error
+    | ReceiveCandidate Encode.Value
     | Advance
     | Retrograde
 
@@ -93,11 +94,19 @@ view elementView model =
         ]
 
 
-viewInt : Maybe Int -> Html Message
-viewInt value =
+viewCandidate : Maybe Candidate -> Html Message
+viewCandidate value =
     case value of
-        Just n ->
-            Html.span [] [ Html.text <| String.fromInt n ]
+        Just aCandidate ->
+            Html.span [] [ Html.text "a candidate" ]
 
         Nothing ->
             Html.span [] [ Html.text <| "-" ]
+
+-- Subscriptions
+
+port candidate : (Encode.Value -> msg) -> Sub msg
+
+subscriptions : Model a -> Sub Message
+subscriptions _ =
+    candidate ReceiveCandidate

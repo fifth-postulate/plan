@@ -7,7 +7,7 @@ use mount::Mount;
 use solver;
 use staticfile::Static;
 use std::path::Path;
-use std::sync::mpsc::{Receiver, Sender};
+use std::sync::mpsc::Sender;
 
 pub fn chain(tx: Sender<solver::Message>) -> Chain {
     let mut chain = Chain::new(mount(tx));

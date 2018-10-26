@@ -47,7 +47,7 @@ impl<T, S> Solver<T, S> where S: 'static + Strategy + Send, T: StrategyFactory<S
 fn solve_with<S>(tx: Sender<sender::Message>, mut strategy: S) where S: Strategy {
     loop {
         if let Some(candidate) = strategy.next() {
-            tx.send(sender::Message::Propose(candidate));
+            tx.send(sender::Message::Propose(candidate)).unwrap();
         } else {
             break;
         }

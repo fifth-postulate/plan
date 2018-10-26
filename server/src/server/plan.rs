@@ -3,7 +3,7 @@ use router::Router;
 use serde_json;
 use serde_json::Error;
 use std::io::Read;
-use std::sync::mpsc::{Receiver, Sender};
+use std::sync::mpsc::Sender;
 use std::sync::{Arc, Mutex};
 
 use domain::ProblemDefinition;

@@ -7,6 +7,7 @@ extern crate simplelog;
 
 use dotenv::dotenv;
 use iron::prelude::*;
+use plan::sender::{self, Repeater};
 use plan::server;
 use plan::solver::{self, Solver};
 use plan::solver::strategy::hardcoded::Factory;
@@ -23,6 +24,7 @@ fn main() {
     info!("Logger configured");
 
     let (solver_tx, solver_rx): (Sender<solver::Message>, Receiver<solver::Message>) = channel();
+    let (sender_tx, sender_rx): (Sender<sender::Message>, Receiver<sender::Message>) = channel();
     let iron_thread = thread::Builder::new()
         .name("iron".to_string())
         .spawn(move || {
@@ -41,6 +43,16 @@ fn main() {
             solver.run();
         }).unwrap();
 
+    let sender_thread = thread::Builder::new()
+        .name("sender".to_string())
+        .spawn(move || {
+            let mut repeater = Repeater::new(sender_rx);
+            info!("starting a repeater.");
+
+            repeater.run();
+        }).unwrap();
+
     iron_thread.join().unwrap();
     solver_thread.join().unwrap();
+    sender_thread.join().unwrap();
 }

@@ -1,7 +1,7 @@
 pub mod strategy;
 
 use domain::ProblemDefinition;
-use std::sync::mpsc::{channel, Receiver, Sender};
+use std::sync::mpsc::{Receiver, Sender};
 use std::thread;
 use std::marker::PhantomData;
 use self::strategy::{StrategyFactory, Strategy};

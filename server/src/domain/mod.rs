@@ -5,9 +5,10 @@ pub mod subject;
 pub mod teacher;
 
 use domain::group::Group;
-use domain::slot::Slots;
+use domain::slot::{Slots, Slot, Weekday};
 use domain::student::Student;
 use domain::teacher::Teacher;
+use std::collections::HashMap;
 
 #[derive(Deserialize, Debug, PartialEq)]
 #[serde(rename_all = "camelCase")]
@@ -19,7 +20,22 @@ pub struct ProblemDefinition {
 }
 
 #[derive(Serialize, Debug, PartialEq)]
-pub struct Candidate {}
+pub struct Candidate {
+    schedule: HashMap<Weekday, Vec<Session>>
+}
+
+impl Candidate {
+    pub fn new() -> Self {
+        Self { schedule: HashMap::new() }
+    }
+}
+
+#[derive(Serialize, Debug, PartialEq)]
+pub struct Session {
+    slot: Slot,
+    teacher: Teacher,
+    group: Group
+}
 
 #[cfg(test)]
 mod tests {

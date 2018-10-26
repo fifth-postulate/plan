@@ -45,7 +45,8 @@ type alias ProblemDefinition =
 {-| A `Candidate` solution to the planning problem.
 -}
 type alias Candidate =
-    Dict Weekday (List Session)
+    { schedule : Dict Weekday (List Session)
+    }
 
 
 {-| A `Session` is `Slot` when a `Teacher` teaches a `Group`.

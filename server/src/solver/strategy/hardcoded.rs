@@ -3,8 +3,14 @@ use solver::strategy::{StrategyFactory, Strategy};
 
 pub struct Factory {}
 
+impl Factory {
+    pub fn new() -> Factory {
+        Factory {}
+    }
+}
+
 impl StrategyFactory<Canned> for Factory {
-    fn create(_: ProblemDefinition) -> Canned {
+    fn create(&mut self, _: ProblemDefinition) -> Canned {
         Canned::new(vec![
             Candidate {},
             Candidate {},

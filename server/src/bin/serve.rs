@@ -9,6 +9,7 @@ use dotenv::dotenv;
 use iron::prelude::*;
 use plan::server;
 use plan::solver::{self, Solver};
+use plan::solver::strategy::hardcoded::Factory;
 use simplelog::{CombinedLogger, Config, LevelFilter, TermLogger};
 use std::env;
 use std::sync::mpsc::{channel, Receiver, Sender};
@@ -34,7 +35,7 @@ fn main() {
     let solver_thread = thread::Builder::new()
         .name("solver".to_string())
         .spawn(move || {
-            let mut solver = Solver::new(solver_rx);
+            let mut solver = Solver::new(solver_rx, Factory::new());
             info!("starting a solver.");
 
             solver.run();

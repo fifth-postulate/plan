@@ -11,6 +11,7 @@ extern crate staticfile;
 #[macro_use]
 extern crate serde_derive;
 extern crate serde_json;
+extern crate ws;
 
 pub mod domain;
 pub mod server;

@@ -18,7 +18,7 @@ pub struct ProblemDefinition {
     participating_students: Vec<Student>,
 }
 
-#[derive(Debug, PartialEq)]
+#[derive(Serialize, Debug, PartialEq)]
 pub struct Candidate {}
 
 #[cfg(test)]

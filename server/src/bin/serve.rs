@@ -46,10 +46,11 @@ fn main() {
     let sender_thread = thread::Builder::new()
         .name("sender".to_string())
         .spawn(move || {
-            let mut repeater = Repeater::new(sender_rx);
+            let socket_address = env::var("socket_address").expect("\"socket_address\" in environment variables");
+            let mut repeater = Repeater::new(socket_address);
             info!("starting a sender.");
 
-            repeater.run();
+            repeater.run(sender_rx);
         }).unwrap();
 
     iron_thread.join().unwrap();

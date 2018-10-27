@@ -6,6 +6,6 @@
     // Until elm/websocket is released.
     var socket = new WebSocket('ws://localhost:8326');
     socket.addEventListener('message', function(event){
-        console.log(event.data);
+        app.ports.candidate.send(event.data);
     });
 })();

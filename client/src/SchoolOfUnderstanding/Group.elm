@@ -1,7 +1,7 @@
 module SchoolOfUnderstanding.Group exposing
     ( Group, GroupIdentity, Level
-    , group, level, lessons
-    , encode, encodeGroupIdentity
+    , group, level, lessons, groupIdentity
+    , encode, encodeGroupIdentity, groupIdentityDecoder
     )
 
 {-| A `Group` is a collection of `Student`s studying a `Subject` at a certain level.
@@ -14,16 +14,18 @@ module SchoolOfUnderstanding.Group exposing
 
 # Building
 
-@docs group, level, lessons
+@docs group, level, lessons, groupIdentity
 
 
-# Encoding
+# Encoding & Decoding
 
-@docs encode, encodeGroupIdentity
+@docs encode, encodeGroupIdentity, groupIdentityDecoder
 
 -}
 
 import Json.Encode as Encode
+import Json.Decode as Decode exposing (Decoder)
+import Json.Decode.Pipeline exposing (required)
 import SchoolOfUnderstanding.Subject as Subject exposing (Subject)
 
 
@@ -90,6 +92,13 @@ group id subject aLevel lessonsNeeded =
     }
 
 
+{-| Create a `GroupIdentity` from an id.
+-}
+groupIdentity : Int -> GroupIdentity
+groupIdentity =
+    GroupIdentity
+
+
 {-| Create a `Level`.
 -}
 level : Int -> Level
@@ -102,3 +111,9 @@ level =
 lessons : Int -> Int
 lessons =
     identity
+
+{-| Decode a `Json.Encode.Value` into a `GroupIdentity`. -}
+groupIdentityDecoder: Decoder GroupIdentity
+groupIdentityDecoder =
+    Decode.succeed GroupIdentity
+        |> required "groupNumber" Decode.int

@@ -6,7 +6,7 @@ import Html.Events as Event
 import Http
 import Json.Decode as Decode
 import Json.Encode as Encode
-import Plan exposing (ProblemDefinition, Candidate)
+import Plan exposing (Candidate, ProblemDefinition)
 import Problem exposing (problemDefinition)
 import SchoolOfUnderstanding
 import Stream exposing (Stream)
@@ -25,12 +25,16 @@ main =
 
 init : Model Candidate
 init =
-    { stream = Stream.empty, problemDefinition = problemDefinition }
+    { stream = Stream.empty
+    , problemDefinition = problemDefinition
+    , message = Nothing
+    }
 
 
 type alias Model a =
     { stream : Stream a
     , problemDefinition : ProblemDefinition
+    , message : Maybe String
     }
 
 
@@ -38,12 +42,12 @@ type Message
     = DoNothing
     | Plan
     | BadResponse Http.Error
-    | ReceiveCandidate Encode.Value
+    | ReceiveCandidate String
     | Advance
     | Retrograde
 
 
-update : Message -> Model a -> ( Model a, Cmd Message )
+update : Message -> Model Candidate -> ( Model Candidate, Cmd Message )
 update message model =
     case message of
         Plan ->
@@ -76,15 +80,36 @@ update message model =
         Retrograde ->
             ( { model | stream = Stream.retrograde model.stream }, Cmd.none )
 
-        -- TODO Handle all cases
+        ReceiveCandidate json ->
+            let
+                maybeCandidate =
+                    json
+                        |> Decode.decodeString Plan.candidateDecoder
+
+                nextModel =
+                    case maybeCandidate of
+                        Ok aCandidate ->
+                            { model | stream = Stream.insert aCandidate model.stream }
+
+                        Err error ->
+                            { model | message = Just ("could not decode candidate:" ++ Decode.errorToString error ) }
+            in
+            ( nextModel, Cmd.none )
+
         _ ->
             ( model, Cmd.none )
 
 
 view : (Maybe a -> Html Message) -> Model a -> Html Message
 view elementView model =
+    let
+        message =
+            model.message
+                |> Maybe.withDefault ""
+    in
     Html.div []
-        [ Html.div [] [ Html.button [ Event.onClick Plan ] [ Html.text "plan" ] ]
+        [ Html.div [] [ Html.span [] [ Html.text message ] ]
+        , Html.div [] [ Html.button [ Event.onClick Plan ] [ Html.text "plan" ] ]
         , Html.div []
             [ Html.button [ Event.onClick Retrograde ] [ Html.text "←" ]
             , elementView (Stream.peek model.stream)
@@ -103,9 +128,13 @@ viewCandidate value =
         Nothing ->
             Html.span [] [ Html.text <| "-" ]
 
+
+
 -- Subscriptions
 
-port candidate : (Encode.Value -> msg) -> Sub msg
+
+port candidate : (String -> msg) -> Sub msg
+
 
 subscriptions : Model a -> Sub Message
 subscriptions _ =

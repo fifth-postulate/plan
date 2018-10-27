@@ -1,6 +1,7 @@
 module Plan exposing
     ( ProblemDefinition, Candidate, Session
     , problem
+    , candidateFromList, candidateDecoder
     , encode
     )
 
@@ -17,18 +18,26 @@ module Plan exposing
 @docs problem
 
 
+# Conversion
+
+@docs candidateFromList, candidateDecoder
+
+
 # Encoding
 
 @docs encode
 
 -}
 
+import Dict
+import Json.Decode as Decode exposing (Decoder)
+import Json.Decode.Pipeline exposing (required)
 import Json.Encode as Encode
-import SchoolOfUnderstanding as School exposing (Dict)
-import SchoolOfUnderstanding.Group as Group exposing (Group)
+import SchoolOfUnderstanding as School
+import SchoolOfUnderstanding.Group as Group exposing (Group, GroupIdentity)
 import SchoolOfUnderstanding.Slot as Slot exposing (Slot, Slots, Weekday)
 import SchoolOfUnderstanding.Student as Student exposing (Student)
-import SchoolOfUnderstanding.Teacher as Teacher exposing (Teacher)
+import SchoolOfUnderstanding.Teacher as Teacher exposing (Teacher, TeacherIdentity)
 import Stream exposing (Stream)
 
 
@@ -45,7 +54,7 @@ type alias ProblemDefinition =
 {-| A `Candidate` solution to the planning problem.
 -}
 type alias Candidate =
-    { schedule : Dict Weekday (List Session)
+    { schedule : School.Dict Weekday (List Session)
     }
 
 
@@ -53,8 +62,8 @@ type alias Candidate =
 -}
 type alias Session =
     { slot : Slot
-    , teacher : Teacher
-    , group : Group
+    , teacher : TeacherIdentity
+    , group : GroupIdentity
     }
 
 
@@ -79,3 +88,62 @@ problem availableSlots groupsToTeach availableTeachers participatingStudents =
     , availableTeachers = availableTeachers
     , participatingStudents = participatingStudents
     }
+
+
+{-| Create a candidate from a `List` of a pair of `Weekday` and `List Session`.
+-}
+candidateFromList : List ( Weekday, List Session ) -> Candidate
+candidateFromList list =
+    let
+        emptySchedule =
+            School.empty Slot.weekdayToInt
+
+        insert ( weekday, sessions ) partialSchedule =
+            School.insert weekday sessions partialSchedule
+
+        schedule =
+            list
+                |> List.foldl insert emptySchedule
+    in
+    Candidate schedule
+
+
+{-| Decoder for a `Candidate`.
+-}
+candidateDecoder : Decoder Candidate
+candidateDecoder =
+    Decode.succeed Candidate
+        |> required "schedule" scheduleDecoder
+
+
+scheduleDecoder : Decoder (School.Dict Weekday (List Session))
+scheduleDecoder =
+    let
+        toSchedule pairs =
+            let
+                inserter ( name, sessions ) aSchedule =
+                    case Slot.weekdayFromString name of
+                        Ok weekday ->
+                            School.insert weekday sessions aSchedule
+
+                        Err _ ->
+                            aSchedule
+
+                emptySchedule =
+                    School.empty Slot.weekdayToInt
+            in
+            List.foldl inserter emptySchedule pairs
+    in
+    sessionDecoder
+        |> Decode.list
+        |> Decode.dict
+        |> Decode.map Dict.toList
+        |> Decode.map toSchedule
+
+
+sessionDecoder : Decoder Session
+sessionDecoder =
+    Decode.succeed Session
+        |> required "slot" Slot.slotDecoder
+        |> required "teacher" Teacher.teacherIdentityDecoder
+        |> required "group" Group.groupIdentityDecoder

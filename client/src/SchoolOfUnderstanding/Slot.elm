@@ -1,6 +1,7 @@
 module SchoolOfUnderstanding.Slot exposing
-    ( Weekday(..), Slots, Slot, TimeOfDay
-    , encode, encodeWeekday
+    ( Weekday(..), Slots, Slot, TimeOfDay, ToWeekdayConversionError
+    , weekdayToInt, weekdayToString, weekdayFromString
+    , encode, encodeWeekday, slotDecoder
     , emptySlots, insert, slot, time
     )
 
@@ -9,7 +10,7 @@ module SchoolOfUnderstanding.Slot exposing
 
 # Types
 
-@docs Weekday, Slots, Slot, TimeOfDay
+@docs Weekday, Slots, Slot, TimeOfDay, ToWeekdayConversionError
 
 
 # Building
@@ -17,12 +18,19 @@ module SchoolOfUnderstanding.Slot exposing
 @ docs emptySlots, insert, slot, time
 
 
-# Encoding
+# Conversion
 
-@docs encode, encodeWeekday
+@docs weekdayToInt, weekdayToString, weekdayFromString
+
+
+# Encoding & Decoding
+
+@docs encode, encodeWeekday, slotDecoder
 
 -}
 
+import Json.Decode as Decode exposing (Decoder)
+import Json.Decode.Pipeline exposing (required)
 import Json.Encode as Encode
 import SchoolOfUnderstanding as School exposing (Dict)
 
@@ -91,6 +99,42 @@ weekdayToString weekday =
 
         Sunday ->
             "sunday"
+
+
+{-| Converts one of `"monday"`, `"tuesday"`, `"wednesday"`, `"thursday"`, `"friday"`, `"saturday"` or `"sunday"` into the corresponding `Weekday`.
+-}
+weekdayFromString : String -> Result ToWeekdayConversionError Weekday
+weekdayFromString name =
+    case name of
+        "monday" ->
+            Ok Monday
+
+        "tuesday" ->
+            Ok Tuesday
+
+        "wednesday" ->
+            Ok Wednesday
+
+        "thursday" ->
+            Ok Thursday
+
+        "friday" ->
+            Ok Friday
+
+        "saturday" ->
+            Ok Saturday
+
+        "sunday" ->
+            Ok Sunday
+
+        _ ->
+            Err <| NotAnWeekday name
+
+
+{-| Errors that occur when converting a `String` to a `Weekday`.
+-}
+type ToWeekdayConversionError
+    = NotAnWeekday String
 
 
 {-| Available `Slot`s per `Weekday`
@@ -190,3 +234,21 @@ encodeWeekday weekday =
     weekday
         |> weekdayToString
         |> Encode.string
+
+
+{-| Decode a `Json.Encode.Value` into a `Slot`.
+-}
+slotDecoder : Decoder Slot
+slotDecoder =
+    Decode.succeed Slot
+        |> required "start" timeOfDayDecoder
+        |> required "finish" timeOfDayDecoder
+
+
+{-| Decode a `Json.Encode.Value` into a `TimeOfDay`.
+-}
+timeOfDayDecoder : Decoder TimeOfDay
+timeOfDayDecoder =
+    Decode.succeed TimeOfDay
+        |> required "hour" Decode.int
+        |> required "minutes" Decode.int

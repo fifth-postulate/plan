@@ -1,6 +1,6 @@
 module SchoolOfUnderstanding.Teacher exposing
-    ( teacher, canTeach, isAvailableOn
-    , encode
+    ( teacher, canTeach, isAvailableOn, teacherIdentity
+    , encode, teacherIdentityDecoder
     , Teacher, TeacherIdentity
     )
 
@@ -16,16 +16,18 @@ module SchoolOfUnderstanding.Teacher exposing
 
 # Building
 
-@docs teacher, canTeach, isAvailableOn
+@docs teacher, canTeach, isAvailableOn, teacherIdentity
 
 
-# Encoding
+# Encoding & Decoding
 
-@docs encode
+@docs encode, teacherIdentityDecoder
 
 -}
 
 import Json.Encode as Encode
+import Json.Decode as Decode exposing (Decoder)
+import Json.Decode.Pipeline exposing (required)
 import SchoolOfUnderstanding.Slot as Slot exposing (Weekday)
 import SchoolOfUnderstanding.Subject as Subject exposing (Subject)
 
@@ -54,6 +56,13 @@ teacher nickname =
             TeacherIdentity { nickname = nickname }
     in
     { identity = identity, capabilities = [], availabilities = [] }
+
+
+{-| Create a `TeacherIdentity` from a nickname.
+-}
+teacherIdentity : String -> TeacherIdentity
+teacherIdentity nickname =
+    TeacherIdentity { nickname = nickname }
 
 
 {-| Transforms a `Teacher` into a `Teacher` with a list of capabilities.
@@ -106,3 +115,9 @@ encodeAvailabilities : List Weekday -> Encode.Value
 encodeAvailabilities availabilities =
     availabilities
         |> Encode.list Slot.encodeWeekday
+
+{-| Decode a `Json.Encode.Value` to a `TeacherIdentity` -}
+teacherIdentityDecoder: Decoder TeacherIdentity
+teacherIdentityDecoder =
+    Decode.succeed teacherIdentity
+        |> required "nickname" Decode.string

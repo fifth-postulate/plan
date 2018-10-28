@@ -23,21 +23,15 @@ module SchoolOfUnderstanding.Student exposing
 
 -}
 
-import Dict.Any as AnyDict exposing (AnyDict)
 import Json.Encode as Encode
 import SchoolOfUnderstanding.Group as Group exposing (Group, GroupIdentity)
 import SchoolOfUnderstanding.Subject as Subject exposing (Subject)
-
-
-type alias Dict k v =
-    AnyDict String k v
-
 
 {-| A `Student` is person enrolled in the School of Understanding.
 -}
 type alias Student =
     { identity : StudentIdentity
-    , memberships : Dict Subject GroupIdentity
+    , memberships : List GroupIdentity
     }
 
 
@@ -69,21 +63,9 @@ encodeStudentIdentity (StudentIdentity { studentNumber }) =
 
 {-| Encodes a memberships into a `Json.Encode.Value`.
 -}
-encodeMemberships : Dict Subject GroupIdentity -> Encode.Value
+encodeMemberships : List GroupIdentity -> Encode.Value
 encodeMemberships memberships =
-    let
-        key subject =
-            Subject.toString subject
-
-        value groupIdentity =
-            Group.encodeGroupIdentity groupIdentity
-
-        collect subject groupIdentity accumulator =
-            ( key subject, value groupIdentity ) :: accumulator
-    in
-    memberships
-        |> AnyDict.foldr collect []
-        |> Encode.object
+    Encode.list Group.encodeGroupIdentity memberships
 
 
 {-| Create a `Student`.
@@ -94,7 +76,7 @@ student id =
         identity =
             StudentIdentity { studentNumber = id }
     in
-    { identity = identity, memberships = AnyDict.empty Subject.toString }
+    { identity = identity, memberships = [] }
 
 
 {-| Enrolls a `Student` in a number of `Group`s.
@@ -103,11 +85,10 @@ memberOf : List Group -> Student -> Student
 memberOf groups aStudent =
     let
         enroll { subject, identity } ms =
-            ms
-                |> AnyDict.insert subject identity
+            identity :: ms
 
         memberships =
             groups
-                |> List.foldl enroll aStudent.memberships
+                |> List.foldr enroll aStudent.memberships
     in
     { aStudent | memberships = memberships }

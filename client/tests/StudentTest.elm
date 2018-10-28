@@ -28,6 +28,6 @@ suite =
                                 |> Student.encode
                                 |> Encode.encode 0
                     in
-                    Expect.equal encoding """{"identity":{"studentNumber":3435},"memberships":{"Math":{"groupNumber":37},"Spelling":{"groupNumber":51}}}"""
+                    Expect.equal encoding """{"identity":{"studentNumber":3435},"memberships":[{"groupNumber":37},{"groupNumber":51}]}"""
             ]
         ]

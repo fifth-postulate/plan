@@ -28,6 +28,10 @@ impl Candidate {
     pub fn new() -> Self {
         Self { schedule: HashMap::new() }
     }
+
+    pub fn insert(&mut self, weekday: Weekday, sessions: Vec<Session>) {
+        self.schedule.insert(weekday, sessions);
+    }
 }
 
 #[derive(Serialize, Debug, PartialEq)]
@@ -224,27 +228,27 @@ mod tests {
       \"identity\": {
         \"studentNumber\": 3435
       },
-      \"memberships\": {
-        \"Math\": {
+      \"memberships\": [
+        {
           \"groupNumber\": 37
         },
-        \"Spelling\": {
+        {
           \"groupNumber\": 51
         }
-      }
+      ]
     },
     {
       \"identity\": {
         \"studentNumber\": 1729
       },
-      \"memberships\": {
-        \"Math\": {
+      \"memberships\": [
+        {
           \"groupNumber\": 42
         },
-        \"Spelling\": {
+        {
           \"groupNumber\": 51
         }
-      }
+      ]
     }
   ]
 }";

@@ -1,4 +1,5 @@
 use domain::{Candidate, ProblemDefinition};
+use domain::slot::{Weekday};
 use solver::strategy::{Strategy, StrategyFactory};
 
 #[derive(Default)]
@@ -12,7 +13,13 @@ impl Factory {
 
 impl StrategyFactory<Canned> for Factory {
     fn create(&mut self, _: ProblemDefinition) -> Canned {
-        Canned::new(vec![Candidate::new(), Candidate::new()])
+        let mut first_candidate = Candidate::new();
+        first_candidate.insert(Weekday::Monday, vec![]);
+
+        let mut second_candidate = Candidate::new();
+        second_candidate.insert(Weekday::Tuesday, vec![]);
+
+        Canned::new(vec![first_candidate, second_candidate])
     }
 }
 

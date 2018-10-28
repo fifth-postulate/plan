@@ -23,9 +23,9 @@ module SchoolOfUnderstanding.Group exposing
 
 -}
 
-import Json.Encode as Encode
 import Json.Decode as Decode exposing (Decoder)
 import Json.Decode.Pipeline exposing (required)
+import Json.Encode as Encode
 import SchoolOfUnderstanding.Subject as Subject exposing (Subject)
 
 
@@ -112,8 +112,10 @@ lessons : Int -> Int
 lessons =
     identity
 
-{-| Decode a `Json.Encode.Value` into a `GroupIdentity`. -}
-groupIdentityDecoder: Decoder GroupIdentity
+
+{-| Decode a `Json.Encode.Value` into a `GroupIdentity`.
+-}
+groupIdentityDecoder : Decoder GroupIdentity
 groupIdentityDecoder =
     Decode.succeed GroupIdentity
         |> required "groupNumber" Decode.int

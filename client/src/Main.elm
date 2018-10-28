@@ -92,7 +92,7 @@ update message model =
                             { model | stream = Stream.insert aCandidate model.stream }
 
                         Err error ->
-                            { model | message = Just ("could not decode candidate:" ++ Decode.errorToString error ) }
+                            { model | message = Just ("could not decode candidate:" ++ Decode.errorToString error) }
             in
             ( nextModel, Cmd.none )
 

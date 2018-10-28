@@ -1,5 +1,5 @@
+use domain::slot::Weekday;
 use domain::{Candidate, ProblemDefinition};
-use domain::slot::{Weekday};
 use solver::strategy::{Strategy, StrategyFactory};
 
 #[derive(Default)]

@@ -5,7 +5,7 @@ pub mod subject;
 pub mod teacher;
 
 use domain::group::Group;
-use domain::slot::{Slots, Slot, Weekday};
+use domain::slot::{Slot, Slots, Weekday};
 use domain::student::Student;
 use domain::teacher::Teacher;
 use std::collections::HashMap;
@@ -21,12 +21,14 @@ pub struct ProblemDefinition {
 
 #[derive(Serialize, Debug, PartialEq)]
 pub struct Candidate {
-    schedule: HashMap<Weekday, Vec<Session>>
+    schedule: HashMap<Weekday, Vec<Session>>,
 }
 
 impl Candidate {
     pub fn new() -> Self {
-        Self { schedule: HashMap::new() }
+        Self {
+            schedule: HashMap::new(),
+        }
     }
 
     pub fn insert(&mut self, weekday: Weekday, sessions: Vec<Session>) {
@@ -38,7 +40,7 @@ impl Candidate {
 pub struct Session {
     slot: Slot,
     teacher: Teacher,
-    group: Group
+    group: Group,
 }
 
 #[cfg(test)]

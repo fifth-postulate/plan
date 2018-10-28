@@ -27,6 +27,7 @@ import Json.Encode as Encode
 import SchoolOfUnderstanding.Group as Group exposing (Group, GroupIdentity)
 import SchoolOfUnderstanding.Subject as Subject exposing (Subject)
 
+
 {-| A `Student` is person enrolled in the School of Understanding.
 -}
 type alias Student =

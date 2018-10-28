@@ -7,6 +7,7 @@ import SchoolOfUnderstanding.Student exposing (memberOf, student)
 import SchoolOfUnderstanding.Subject exposing (subject)
 import SchoolOfUnderstanding.Teacher exposing (canTeach, isAvailableOn, teacher)
 
+
 problemDefinition =
     problem
         (emptySlots
